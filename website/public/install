@@ -22,6 +22,14 @@ detect_arch() {
     esac
 }
 
+get_extension() {
+    if [ "$(uname -s)" = "Windows" ] || [ "$(uname -s)" = "MINGW"* ]; then
+        echo ".exe"
+    else
+        echo ""
+    fi
+}
+
 echo "⬇️  Downloading OxideMC..."
 
 # Get latest release info
@@ -49,6 +57,11 @@ if [ "$OS" = "macos" ]; then
     fi
 else
     FILENAME="oxidemc-linux-${ARCH}"
+fi
+
+# Add .exe for Windows
+if [ "$(uname -s)" = "MINGW"* ] || [ "$(uname -s)" = "Windows"* ]; then
+    FILENAME="${FILENAME}.exe"
 fi
 
 DOWNLOAD_URL="https://github.com/${REPO}/releases/download/${LATEST_TAG}/${FILENAME}"
