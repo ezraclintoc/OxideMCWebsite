@@ -1,0 +1,322 @@
+---
+---
+
+<section class="hero">
+  <div class="container hero__inner">
+    <div class="hero__text">
+      <div class="hero__badge">
+        <span class="hero__badge-dot"></span>
+        Rust-powered · Blazing fast
+      </div>
+      <h1 class="hero__title">
+        Set up your Minecraft server
+        <span class="hero__title-accent"> in seconds</span>
+      </h1>
+      <p class="hero__subtitle">
+        OxideMC is an interactive CLI tool that downloads, configures, and launches
+        Vanilla, Paper, or Fabric servers — with a single command.
+      </p>
+
+      <div class="hero__cta">
+        <a id="os-download-btn" href="https://github.com/ezraclintoc/OxideMC/releases/latest" class="btn btn--primary" target="_blank" rel="noopener">
+          Download for <span id="os-name">your platform</span>
+        </a>
+        <a href="/docs" class="btn btn--secondary">Read the docs</a>
+      </div>
+
+      <div class="hero__stars">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--accent)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <span id="stars-count">—</span> stars on GitHub
+      </div>
+    </div>
+
+    <div class="hero__terminal">
+      <div class="terminal">
+        <div class="terminal__header">
+          <span class="terminal__dot terminal__dot--red"></span>
+          <span class="terminal__dot terminal__dot--yellow"></span>
+          <span class="terminal__dot terminal__dot--green"></span>
+          <span class="terminal__title">bash</span>
+        </div>
+        <div class="terminal__body">
+          <div class="terminal__line">
+            <span class="terminal__prompt">$</span>
+            <span class="terminal__typed" id="terminal-text"></span><span class="terminal__cursor">|</span>
+          </div>
+          <div class="terminal__output" id="terminal-output" style="display:none">
+            <span style="color: var(--accent);">Setting up your Minecraft Server</span><br/>
+            <span style="color: var(--text-muted);">? What do you want to name your server?</span> <span style="color:var(--text)">minecraft-server</span><br/>
+            <span style="color: var(--text-muted);">? Which software do you want to use?</span> <span style="color:var(--accent-light)">Paper (Recommended)</span><br/>
+            <span style="color: var(--text-muted);">? Which version?</span> <span style="color:var(--text)">1.21.4</span><br/>
+            <span style="color: #4ade80;">Downloading server.jar... 100%</span><br/>
+            <span style="color: #4ade80;">You're all set!</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding: 6rem 0 5rem;
+    background: radial-gradient(ellipse at 20% 50%, rgba(232, 98, 42, 0.08) 0%, transparent 60%);
+  }
+
+  .hero__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .hero__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(232, 98, 42, 0.1);
+    border: 1px solid rgba(232, 98, 42, 0.3);
+    border-radius: 100px;
+    padding: 0.35rem 1rem;
+    font-size: 0.85rem;
+    color: var(--accent-light);
+    margin-bottom: 1.5rem;
+  }
+
+  .hero__badge-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .hero__title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    margin-bottom: 1rem;
+    line-height: 1.15;
+  }
+
+  .hero__title-accent {
+    color: var(--accent);
+  }
+
+  .hero__subtitle {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    line-height: 1.7;
+  }
+
+  .hero__cta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius);
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all var(--transition);
+    cursor: pointer;
+    border: none;
+  }
+
+  .btn--primary {
+    background: var(--accent);
+    color: white;
+  }
+
+  .btn--primary:hover {
+    background: var(--accent-light);
+    color: white;
+    transform: translateY(-1px);
+  }
+
+  .btn--secondary {
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .btn--secondary:hover {
+    background: var(--surface-hover);
+    color: var(--text);
+    border-color: var(--accent);
+  }
+
+  .hero__stars {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+
+  .terminal {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+
+  .terminal__header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .terminal__dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+
+  .terminal__dot--red { background: #ff5f57; }
+  .terminal__dot--yellow { background: #ffbd2e; }
+  .terminal__dot--green { background: #28ca41; }
+
+  .terminal__title {
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+  }
+
+  .terminal__body {
+    padding: 1.25rem 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    line-height: 1.8;
+    min-height: 200px;
+  }
+
+  .terminal__line {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+
+  .terminal__prompt {
+    color: var(--accent);
+    user-select: none;
+  }
+
+  .terminal__cursor {
+    display: inline-block;
+    animation: blink 1s infinite;
+    color: var(--accent);
+    font-weight: 300;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  .terminal__output {
+    margin-top: 0.75rem;
+    line-height: 1.9;
+  }
+
+  @media (max-width: 768px) {
+    .hero__inner {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+  }
+</style>
+
+<script>
+  // OS detection for download button
+  function detectOS() {
+    const ua = navigator.userAgent;
+    if (ua.includes('Win')) return { name: 'Windows', file: 'oxidemc-windows-x86_64.exe' };
+    if (ua.includes('Mac')) return { name: 'macOS', file: 'oxidemc-macos-arm64' };
+    return { name: 'Linux', file: 'oxidemc-linux-x86_64' };
+  }
+
+  const os = detectOS();
+  const btn = document.getElementById('os-download-btn');
+  const osName = document.getElementById('os-name');
+  if (btn && osName) {
+    osName.textContent = os.name;
+    (btn as HTMLAnchorElement).href = `https://github.com/ezraclintoc/OxideMC/releases/latest/download/${os.file}`;
+  }
+
+  // GitHub stars
+  fetch('https://api.github.com/repos/ezraclintoc/OxideMC')
+    .then(r => r.json())
+    .then(data => {
+      const el = document.getElementById('stars-count');
+      if (el && data.stargazers_count !== undefined) {
+        el.textContent = data.stargazers_count.toLocaleString();
+      }
+    })
+    .catch(() => {});
+
+  // Terminal typing animation
+  const commands = [
+    'curl -sL https://oxidemc.dev/install | bash',
+    'oxidemc install',
+    'oxidemc configure',
+  ];
+
+  let cmdIndex = 0;
+  let charIndex = 0;
+  let isDeleting = false;
+  const typedEl = document.getElementById('terminal-text');
+  const outputEl = document.getElementById('terminal-output');
+
+  function type() {
+    if (!typedEl) return;
+    const current = commands[cmdIndex];
+
+    if (!isDeleting) {
+      typedEl.textContent = current.slice(0, charIndex + 1);
+      charIndex++;
+
+      if (charIndex === current.length) {
+        if (cmdIndex === 0 && outputEl) {
+          setTimeout(() => { outputEl.style.display = 'block'; }, 400);
+        }
+        setTimeout(() => {
+          if (outputEl) outputEl.style.display = 'none';
+          isDeleting = true;
+          setTimeout(type, 1200);
+        }, 2500);
+        return;
+      }
+    } else {
+      typedEl.textContent = current.slice(0, charIndex - 1);
+      charIndex--;
+
+      if (charIndex === 0) {
+        isDeleting = false;
+        cmdIndex = (cmdIndex + 1) % commands.length;
+        setTimeout(type, 400);
+        return;
+      }
+    }
+
+    setTimeout(type, isDeleting ? 40 : 70);
+  }
+
+  setTimeout(type, 800);
+</script>
