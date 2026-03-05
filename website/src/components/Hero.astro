@@ -9,8 +9,8 @@
         Rust-powered · Blazing fast
       </div>
       <h1 class="hero__title">
-        Set up your Minecraft server
-        <span class="hero__title-accent"> in seconds</span>
+        Set up your Minecraft server<br/>
+        <span class="hero__title-accent">in seconds</span>
       </h1>
       <p class="hero__subtitle">
         OxideMC is an interactive CLI tool that downloads, configures, and launches
@@ -43,12 +43,28 @@
             <span class="terminal__prompt">$</span>
             <span class="terminal__typed" id="terminal-text"></span><span class="terminal__cursor">|</span>
           </div>
-          <div class="terminal__output" id="terminal-output" style="display:none">
-            <span style="color: var(--text-muted);">⬇️  Downloading OxideMC...</span><br/>
-            <span style="color: var(--text-muted);">📦 Downloading from: github.com/.../oxidemc-linux-x86_64</span><br/>
-            <span style="color: #4ade80;">✅ Installed to ~/.local/bin/oxidemc</span><br/>
-            <br/>
-            <span style="color: var(--text);">Run 'oxidemc' to start!</span>
+          <div class="terminal__output" id="terminal-output-0">
+            <span class="out-line" style="color: var(--text-muted);">⬇️  Downloading OxideMC...</span>
+            <span class="out-line" style="color: var(--text-muted);">📦 Downloading from: https://github.com/ezraclintoc/OxideMC/releases/download/v0.1.0/oxidemc-linux-x86_64</span>
+            <span class="out-line" style="color: #4ade80;">✅ Installed to ~/.local/bin/oxidemc</span>
+            <span class="out-line">&nbsp;</span>
+            <span class="out-line" style="color: var(--text);">Run 'oxidemc' to start!</span>
+          </div>
+          <div class="terminal__output" id="terminal-output-1">
+            <span class="out-line" style="color: var(--accent);">◆  Setting up your Minecraft Server</span>
+            <span class="out-line">◇  Server name: <span style="color:var(--text)">my-server</span></span>
+            <span class="out-line">◇  Software: <span style="color:var(--text)">Paper (Recommended)</span></span>
+            <span class="out-line">◇  Version: <span style="color:var(--text)">1.21.4</span></span>
+            <span class="out-line" style="color: #4ade80;">◼  Downloading server.jar ── 47.3 MB / 47.3 MB</span>
+            <span class="out-line">◇  Accept EULA? <span style="color:#4ade80">Yes</span></span>
+            <span class="out-line" style="color: var(--accent);">◆  You're all set!</span>
+          </div>
+          <div class="terminal__output" id="terminal-output-2">
+            <span class="out-line">◇  Server directory: <span style="color:var(--text)">~/servers/my-server</span></span>
+            <span class="out-line" style="color: var(--text-muted);">ℹ  Server found: Paper 1.21.4</span>
+            <span class="out-line">◇  What do you want to configure?  <span style="color:var(--text)">Game Settings</span></span>
+            <span class="out-line">◇  Which setting do you want to change?  <span style="color:var(--text)">Difficulty</span></span>
+            <span class="out-line">◇  Select the difficulty level:  <span style="color:var(--text)">Hard</span></span>
           </div>
         </div>
       </div>
@@ -163,7 +179,14 @@
     font-size: 0.9rem;
   }
 
+  .hero__terminal {
+    width: 540px;
+    max-width: 100%;
+    justify-self: end;
+  }
+
   .terminal {
+    width: 100%;
     background: var(--code-bg);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
@@ -203,7 +226,8 @@
     font-family: var(--font-mono);
     font-size: 0.875rem;
     line-height: 1.8;
-    min-height: 200px;
+    height: 260px;
+    overflow: hidden;
   }
 
   .terminal__line {
@@ -230,8 +254,28 @@
   }
 
   .terminal__output {
+    display: none;
     margin-top: 0.75rem;
     line-height: 1.9;
+    flex-direction: column;
+  }
+
+  .terminal__output.active {
+    display: flex;
+  }
+
+  .out-line {
+    display: none;
+  }
+
+  .out-line.visible {
+    display: block;
+    animation: fadein 0.15s ease;
+  }
+
+  @keyframes fadein {
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
 
   @media (max-width: 768px) {
@@ -281,7 +325,6 @@
   let charIndex = 0;
   let isDeleting = false;
   const typedEl = document.getElementById('terminal-text');
-  const outputEl = document.getElementById('terminal-output');
 
   function type() {
     if (!typedEl) return;
@@ -292,14 +335,29 @@
       charIndex++;
 
       if (charIndex === current.length) {
-        if (cmdIndex === 0 && outputEl) {
-          setTimeout(() => { outputEl.style.display = 'block'; }, 400);
+        const outputConfigs = [
+          { id: '#terminal-output-0', delays: [400, 1100, 2000, 2350, 2650], total: 4200 },
+          { id: '#terminal-output-1', delays: [300, 550, 800, 1050, 1800, 2200, 2500], total: 3800 },
+          { id: '#terminal-output-2', delays: [300, 700, 1200, 1700, 2200], total: 3500 },
+        ];
+        const cfg = outputConfigs[cmdIndex];
+        if (cfg) {
+          const container = document.querySelector(cfg.id);
+          const lines = container.querySelectorAll('.out-line');
+          container.classList.add('active');
+          lines.forEach((el, i) => setTimeout(() => el.classList.add('visible'), cfg.delays[i]));
+          setTimeout(() => {
+            lines.forEach(el => el.classList.remove('visible'));
+            container.classList.remove('active');
+            isDeleting = true;
+            setTimeout(type, 1200);
+          }, cfg.total);
+        } else {
+          setTimeout(() => {
+            isDeleting = true;
+            setTimeout(type, 1200);
+          }, 2500);
         }
-        setTimeout(() => {
-          if (outputEl) outputEl.style.display = 'none';
-          isDeleting = true;
-          setTimeout(type, 1200);
-        }, 2500);
         return;
       }
     } else {
