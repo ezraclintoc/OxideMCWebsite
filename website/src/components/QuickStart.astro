@@ -1,0 +1,210 @@
+---
+const tabs = [
+  {
+    id: 'script',
+    label: 'Install Script',
+    code: 'curl -sL https://oxidemc.dev/install | bash',
+    note: 'Installs the latest binary to ~/.local/bin',
+  },
+  {
+    id: 'binary',
+    label: 'Download Binary',
+    code: `# Linux x86_64
+wget https://github.com/ezraclintoc/OxideMC/releases/latest/download/oxidemc-linux-x86_64
+chmod +x oxidemc-linux-x86_64 && mv oxidemc-linux-x86_64 ~/.local/bin/oxidemc
+
+# macOS ARM64
+wget https://github.com/ezraclintoc/OxideMC/releases/latest/download/oxidemc-macos-arm64
+chmod +x oxidemc-macos-arm64 && mv oxidemc-macos-arm64 ~/.local/bin/oxidemc`,
+    note: 'Download the pre-built binary for your platform',
+  },
+  {
+    id: 'source',
+    label: 'Build from Source',
+    code: `git clone https://github.com/ezraclintoc/OxideMC.git
+cd OxideMC
+cargo build --release
+./target/release/oxidemc`,
+    note: 'Requires Rust and Cargo installed',
+  },
+];
+---
+
+<section class="quickstart">
+  <div class="container">
+    <h2 class="quickstart__heading">Get started in 30 seconds</h2>
+    <p class="quickstart__subheading">Three ways to install OxideMC — pick your preference.</p>
+
+    <div class="tabs">
+      <div class="tabs__list" role="tablist">
+        {tabs.map((tab, i) => (
+          <button
+            class={`tabs__btn ${i === 0 ? 'tabs__btn--active' : ''}`}
+            role="tab"
+            data-tab={tab.id}
+            aria-selected={i === 0 ? 'true' : 'false'}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      {tabs.map((tab, i) => (
+        <div
+          class={`tabs__panel ${i === 0 ? 'tabs__panel--active' : ''}`}
+          data-panel={tab.id}
+          role="tabpanel"
+        >
+          <div class="code-block">
+            <div class="code-block__header">
+              <span class="code-block__lang">bash</span>
+              <button class="code-block__copy" data-code={tab.code}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                Copy
+              </button>
+            </div>
+            <pre><code>{tab.code}</code></pre>
+          </div>
+          <p class="tabs__note">{tab.note}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .quickstart__heading {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    text-align: center;
+    margin-bottom: 0.75rem;
+  }
+
+  .quickstart__subheading {
+    text-align: center;
+    color: var(--text-muted);
+    margin-bottom: 2.5rem;
+  }
+
+  .tabs {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .tabs__list {
+    display: flex;
+    gap: 0.25rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .tabs__btn {
+    flex: 1;
+    padding: 0.5rem 1rem;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    border-radius: calc(var(--radius) - 2px);
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all var(--transition);
+  }
+
+  .tabs__btn--active, .tabs__btn:hover {
+    background: var(--accent);
+    color: white;
+  }
+
+  .tabs__panel {
+    display: none;
+  }
+
+  .tabs__panel--active {
+    display: block;
+  }
+
+  .tabs__note {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-top: 0.75rem;
+    text-align: center;
+  }
+
+  .code-block {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .code-block__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .code-block__lang {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .code-block__copy {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all var(--transition);
+  }
+
+  .code-block__copy:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .code-block pre {
+    border: none;
+    border-radius: 0;
+    margin: 0;
+  }
+</style>
+
+<script>
+  document.querySelectorAll('.tabs__btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tab = (btn as HTMLElement).dataset.tab;
+      document.querySelectorAll('.tabs__btn').forEach(b => {
+        b.classList.remove('tabs__btn--active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      document.querySelectorAll('.tabs__panel').forEach(p => p.classList.remove('tabs__panel--active'));
+      btn.classList.add('tabs__btn--active');
+      btn.setAttribute('aria-selected', 'true');
+      document.querySelector(`[data-panel="${tab}"]`)?.classList.add('tabs__panel--active');
+    });
+  });
+
+  document.querySelectorAll('.code-block__copy').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const code = (btn as HTMLElement).dataset.code || '';
+      try {
+        await navigator.clipboard.writeText(code);
+        const orig = btn.innerHTML;
+        btn.innerHTML = '✓ Copied!';
+        setTimeout(() => { btn.innerHTML = orig; }, 2000);
+      } catch {}
+    });
+  });
+</script>

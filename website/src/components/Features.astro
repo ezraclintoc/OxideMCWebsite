@@ -1,0 +1,127 @@
+---
+const features = [
+  {
+    icon: '🪄',
+    title: 'Interactive Setup Wizard',
+    desc: 'Easy and advanced modes guide you through every step — from naming your server to selecting a version.',
+  },
+  {
+    icon: '🎮',
+    title: 'Multi-Platform Support',
+    desc: 'Download Vanilla, Paper, or Fabric servers. More platforms coming soon.',
+  },
+  {
+    icon: '📥',
+    title: 'Automatic Downloads',
+    desc: 'Fetches the latest server JAR files directly with a real-time progress bar.',
+  },
+  {
+    icon: '⚙️',
+    title: 'Fully Customizable',
+    desc: 'Set server name, directory, port, gamemode, difficulty, and PVP — all from the CLI.',
+  },
+  {
+    icon: '📋',
+    title: 'Version Selection',
+    desc: 'Browse and choose from all available Minecraft versions without leaving the terminal.',
+  },
+  {
+    icon: '🦀',
+    title: 'Blazing Fast',
+    desc: 'Built with Rust for maximum performance, minimal memory usage, and instant startup.',
+  },
+];
+---
+
+<section class="features">
+  <div class="container">
+    <h2 class="features__heading">Everything you need to run a server</h2>
+    <p class="features__subheading">No config files, no Java flags, no searching StackOverflow.</p>
+    <div class="features__grid">
+      {features.map(f => (
+        <div class="feature-card" data-animate>
+          <div class="feature-card__icon">{f.icon}</div>
+          <h3 class="feature-card__title">{f.title}</h3>
+          <p class="feature-card__desc">{f.desc}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .features {
+    background: var(--bg-alt);
+  }
+
+  .features__heading {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    text-align: center;
+    margin-bottom: 0.75rem;
+  }
+
+  .features__subheading {
+    text-align: center;
+    color: var(--text-muted);
+    margin-bottom: 3rem;
+  }
+
+  .features__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .feature-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    transition: border-color var(--transition), transform var(--transition);
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .feature-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.5s ease, transform 0.5s ease, border-color var(--transition);
+  }
+
+  .feature-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .feature-card__icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .feature-card__title {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .feature-card__desc {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+</style>
+
+<script>
+  const cards = document.querySelectorAll('[data-animate]');
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.1 }
+  );
+  cards.forEach(card => observer.observe(card));
+</script>

@@ -1,0 +1,145 @@
+---
+const servers = [
+  {
+    name: 'Vanilla',
+    badge: null,
+    desc: 'The official Mojang server. Pure, unmodified Minecraft experience.',
+    pros: ['No extra software required', 'Always up to date', 'Great for small private servers'],
+    icon: '🟩',
+  },
+  {
+    name: 'Paper',
+    badge: 'Recommended',
+    desc: 'High-performance fork with plugin support and major optimizations.',
+    pros: ['Plugin ecosystem (Bukkit/Spigot)', 'Significantly better performance', 'Active community'],
+    icon: '📄',
+  },
+  {
+    name: 'Fabric',
+    badge: null,
+    desc: 'Lightweight modding toolchain for client and server mods.',
+    pros: ['Rich mod ecosystem', 'Fast update cycle', 'Works great with OptiFine alternatives'],
+    icon: '🧵',
+  },
+];
+---
+
+<section class="server-types">
+  <div class="container">
+    <h2 class="server-types__heading">Pick your platform</h2>
+    <p class="server-types__subheading">OxideMC supports the most popular server types out of the box.</p>
+    <div class="server-types__grid">
+      {servers.map(server => (
+        <div class={`server-card ${server.badge ? 'server-card--featured' : ''}`}>
+          {server.badge && <div class="server-card__badge">{server.badge}</div>}
+          <div class="server-card__icon">{server.icon}</div>
+          <h3 class="server-card__name">{server.name}</h3>
+          <p class="server-card__desc">{server.desc}</p>
+          <ul class="server-card__pros">
+            {server.pros.map(pro => (
+              <li>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                {pro}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+    <p class="server-types__coming-soon">Forge support coming soon.</p>
+  </div>
+</section>
+
+<style>
+  .server-types {
+    background: var(--bg-alt);
+  }
+
+  .server-types__heading {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    text-align: center;
+    margin-bottom: 0.75rem;
+  }
+
+  .server-types__subheading {
+    text-align: center;
+    color: var(--text-muted);
+    margin-bottom: 3rem;
+  }
+
+  .server-types__coming-soon {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-top: 2rem;
+  }
+
+  .server-types__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .server-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    position: relative;
+    transition: border-color var(--transition);
+  }
+
+  .server-card--featured {
+    border-color: var(--accent);
+  }
+
+  .server-card:hover {
+    border-color: var(--accent-light);
+  }
+
+  .server-card__badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.2rem 0.8rem;
+    border-radius: 100px;
+    white-space: nowrap;
+  }
+
+  .server-card__icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .server-card__name {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .server-card__desc {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 1.25rem;
+    line-height: 1.6;
+  }
+
+  .server-card__pros {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .server-card__pros li {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+  }
+</style>
