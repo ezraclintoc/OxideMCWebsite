@@ -1,0 +1,516 @@
+---
+import Base from '../layouts/Base.astro';
+
+const roadmap: Record<string, { done: boolean; text: string }[]> = {
+  'Server Types': [
+    { done: true, text: 'Paper server support' },
+    { done: true, text: 'Vanilla server support' },
+    { done: true, text: 'Fabric server support' },
+    { done: false, text: 'Forge server support' },
+  ],
+  'Core Features': [
+    { done: true, text: 'Interactive setup wizard (easy/advanced modes)' },
+    { done: true, text: 'Version selection from available MC versions' },
+    { done: true, text: 'Automatic JAR downloads with progress' },
+    { done: true, text: 'Path expansion (~, ./, ../)' },
+    { done: true, text: 'Server start after download with EULA' },
+    { done: false, text: 'Add more server configuration options (RAM, JVM flags)' },
+    { done: true, text: 'Server port configuration' },
+    { done: true, text: 'Server name configuration' },
+  ],
+  'Mod Management': [
+    { done: false, text: 'Create start script (cross-platform)' },
+    { done: false, text: 'Modrinth support' },
+    { done: false, text: 'CurseForge support' },
+    { done: false, text: 'Add mods by URL' },
+  ],
+  'Distribution': [
+    { done: true, text: 'GitHub Actions for automated builds' },
+    { done: false, text: 'Host install script on domain' },
+    { done: false, text: 'Add more platforms for binary releases' },
+  ],
+  'Polish': [
+    { done: true, text: 'Configuration file support' },
+    { done: false, text: 'Update checker' },
+    { done: false, text: 'Server properties editor' },
+  ],
+};
+---
+
+<Base title="Docs — OxideMC" description="OxideMC documentation: installation, CLI reference, server types, configuration, and roadmap.">
+  <div class="docs-layout">
+    <aside class="sidebar" id="sidebar">
+      <button class="sidebar__close" id="sidebar-close" aria-label="Close menu">✕</button>
+      <nav class="sidebar__nav">
+        <div class="sidebar__section">
+          <p class="sidebar__section-label">Getting Started</p>
+          <a href="#installation" class="sidebar__link">Installation</a>
+          <a href="#quick-start" class="sidebar__link">Quick Start</a>
+        </div>
+        <div class="sidebar__section">
+          <p class="sidebar__section-label">Usage</p>
+          <a href="#cli-reference" class="sidebar__link">CLI Reference</a>
+          <a href="#server-types" class="sidebar__link">Server Types</a>
+          <a href="#configuration" class="sidebar__link">Configuration</a>
+        </div>
+        <div class="sidebar__section">
+          <p class="sidebar__section-label">Other</p>
+          <a href="#roadmap" class="sidebar__link">Roadmap</a>
+          <a href="#contributing" class="sidebar__link">Contributing</a>
+          <a href="#license" class="sidebar__link">License</a>
+        </div>
+      </nav>
+    </aside>
+
+    <div class="docs-overlay" id="docs-overlay"></div>
+
+    <main class="docs-content">
+      <button class="docs-menu-btn" id="docs-menu-btn" aria-label="Open menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        Menu
+      </button>
+
+      <article class="prose">
+
+        <h1>OxideMC Documentation</h1>
+        <p>OxideMC is a Rust-powered CLI tool that sets up Minecraft servers interactively — no manual config required.</p>
+
+        <hr />
+
+        <h2 id="installation">Installation</h2>
+
+        <h3>Option 1: Install Script (Recommended)</h3>
+        <div class="code-block">
+          <div class="code-block__header">
+            <span>bash</span>
+            <button class="copy-btn" data-code="curl -sL https://oxidemc.dev/install | bash">Copy</button>
+          </div>
+          <pre><code>curl -sL https://oxidemc.dev/install | bash</code></pre>
+        </div>
+        <p>Installs the latest binary to <code>~/.local/bin/oxidemc</code>. Make sure <code>~/.local/bin</code> is in your <code>$PATH</code>.</p>
+
+        <h3>Option 2: Download Binary</h3>
+        <table>
+          <thead><tr><th>Platform</th><th>File</th></tr></thead>
+          <tbody>
+            <tr><td>Linux x86_64</td><td><a href="https://github.com/ezraclintoc/OxideMC/releases/latest" target="_blank" rel="noopener">oxidemc-linux-x86_64</a></td></tr>
+            <tr><td>macOS ARM64</td><td><a href="https://github.com/ezraclintoc/OxideMC/releases/latest" target="_blank" rel="noopener">oxidemc-macos-arm64</a></td></tr>
+            <tr><td>Windows x86_64</td><td><a href="https://github.com/ezraclintoc/OxideMC/releases/latest" target="_blank" rel="noopener">oxidemc-windows-x86_64.exe</a></td></tr>
+          </tbody>
+        </table>
+
+        <h3>Option 3: Build from Source</h3>
+        <div class="code-block">
+          <div class="code-block__header">
+            <span>bash</span>
+            <button class="copy-btn" data-code={`git clone https://github.com/ezraclintoc/OxideMC.git\ncd OxideMC\ncargo build --release\n./target/release/oxidemc`}>Copy</button>
+          </div>
+          <pre><code>{`git clone https://github.com/ezraclintoc/OxideMC.git\ncd OxideMC\ncargo build --release\n./target/release/oxidemc`}</code></pre>
+        </div>
+        <p>Requires <a href="https://rustup.rs" target="_blank" rel="noopener">Rust</a> and Cargo installed.</p>
+
+        <hr />
+
+        <h2 id="quick-start">Quick Start</h2>
+        <p>Run OxideMC with no arguments to launch the interactive wizard:</p>
+        <div class="code-block">
+          <div class="code-block__header"><span>bash</span><button class="copy-btn" data-code="oxidemc">Copy</button></div>
+          <pre><code>oxidemc</code></pre>
+        </div>
+        <p>The wizard will ask you for:</p>
+        <ol>
+          <li><strong>Server name</strong> — used as the directory name</li>
+          <li><strong>Directory</strong> — where to save the server files (supports <code>~</code>)</li>
+          <li><strong>Platform</strong> — Vanilla, Paper, or Fabric</li>
+          <li><strong>Version</strong> — choose from all available Minecraft versions</li>
+          <li><strong>EULA acceptance</strong> — required to start the server</li>
+        </ol>
+        <p>After setup, OxideMC downloads the server JAR, runs it once to generate config files, and you're done.</p>
+
+        <hr />
+
+        <h2 id="cli-reference">CLI Reference</h2>
+        <table>
+          <thead>
+            <tr><th>Command</th><th>Aliases</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>oxidemc</code></td><td>—</td><td>Launch interactive mode (install or configure)</td></tr>
+            <tr><td><code>oxidemc install</code></td><td><code>-i</code>, <code>--install</code>, <code>i</code></td><td>Run the interactive setup wizard</td></tr>
+            <tr><td><code>oxidemc configure</code></td><td><code>-c</code>, <code>--configure</code>, <code>c</code></td><td>Configure an existing server</td></tr>
+          </tbody>
+        </table>
+
+        <hr />
+
+        <h2 id="server-types">Server Types</h2>
+
+        <h3>Vanilla</h3>
+        <p>The official Mojang server — unmodified, always up to date. Best for small private servers where you don't need plugins or mods.</p>
+
+        <h3>Paper</h3>
+        <p>A high-performance fork with plugin support (Bukkit/Spigot API). Significantly faster than Vanilla for large player counts. <strong>Recommended for most use cases.</strong></p>
+
+        <h3>Fabric</h3>
+        <p>A lightweight modding toolchain. Supports server-side mods from Modrinth and CurseForge. Best for technical modpacks.</p>
+
+        <h3>Forge</h3>
+        <p><em>Coming soon.</em></p>
+
+        <hr />
+
+        <h2 id="configuration">Configuration</h2>
+        <p>Run <code>oxidemc configure</code> (or <code>oxidemc -c</code>) and point it at your existing server directory. OxideMC will auto-detect the platform and present a menu.</p>
+
+        <h3>Available settings</h3>
+        <table>
+          <thead><tr><th>Setting</th><th>Options</th></tr></thead>
+          <tbody>
+            <tr><td>Difficulty</td><td>peaceful, easy, normal, hard</td></tr>
+            <tr><td>Gamemode</td><td>survival, creative, adventure, spectator</td></tr>
+            <tr><td>PVP</td><td>true, false</td></tr>
+          </tbody>
+        </table>
+        <p>Changes are written to <code>server.properties</code> in your server directory.</p>
+
+        <hr />
+
+        <h2 id="roadmap">Roadmap</h2>
+        {Object.entries(roadmap).map(([category, items]) => (
+          <div>
+            <h3>{category}</h3>
+            <ul class="roadmap-list">
+              {items.map(item => (
+                <li class={item.done ? 'roadmap-list__item--done' : ''}>
+                  <span class="roadmap-list__check">{item.done ? '✅' : '⬜'}</span>
+                  {item.text}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+
+        <hr />
+
+        <h2 id="contributing">Contributing</h2>
+        <p>Contributions are welcome! Please open an issue on <a href="https://github.com/ezraclintoc/OxideMC/issues" target="_blank" rel="noopener">GitHub Issues</a> before submitting a pull request to discuss the change.</p>
+
+        <hr />
+
+        <h2 id="license">License</h2>
+        <p>OxideMC is licensed under the <a href="https://github.com/ezraclintoc/OxideMC/blob/main/LICENSE" target="_blank" rel="noopener">GNU General Public License v3.0</a>.</p>
+
+      </article>
+    </main>
+  </div>
+</Base>
+
+<style>
+  .docs-layout {
+    display: flex;
+    min-height: calc(100vh - 60px);
+  }
+
+  .sidebar {
+    width: 240px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 60px;
+    height: calc(100vh - 60px);
+    overflow-y: auto;
+    border-right: 1px solid var(--border);
+    padding: 2rem 1rem;
+    background: var(--bg);
+  }
+
+  .sidebar__close {
+    display: none;
+  }
+
+  .sidebar__section {
+    margin-bottom: 1.5rem;
+  }
+
+  .sidebar__section-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+    padding: 0 0.5rem;
+  }
+
+  .sidebar__link {
+    display: block;
+    padding: 0.35rem 0.5rem;
+    border-radius: 4px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    transition: all var(--transition);
+  }
+
+  .sidebar__link:hover, .sidebar__link.active {
+    color: var(--text);
+    background: var(--surface);
+  }
+
+  .docs-content {
+    flex: 1;
+    padding: 3rem 4rem;
+    max-width: 800px;
+    min-width: 0;
+  }
+
+  .docs-menu-btn {
+    display: none;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+  }
+
+  .docs-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 49;
+  }
+
+  .prose h1 {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .prose h2 {
+    font-size: 1.4rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .prose h2:first-of-type {
+    border-top: none;
+    margin-top: 1.5rem;
+  }
+
+  .prose h3 {
+    font-size: 1.1rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    color: var(--accent-light);
+  }
+
+  .prose p {
+    color: var(--text-muted);
+    line-height: 1.75;
+    margin-bottom: 1rem;
+  }
+
+  .prose ol, .prose ul:not(.roadmap-list):not(.server-card__pros) {
+    color: var(--text-muted);
+    padding-left: 1.5rem;
+    line-height: 1.8;
+    margin-bottom: 1rem;
+  }
+
+  .prose code {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.875em;
+    color: var(--accent-light);
+  }
+
+  .prose hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 2rem 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+
+  th {
+    text-align: left;
+    padding: 0.6rem 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  td {
+    padding: 0.6rem 1rem;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+
+  .code-block {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+
+  .code-block__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.4rem 1rem;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .copy-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    transition: all var(--transition);
+  }
+
+  .copy-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .code-block pre {
+    border: none;
+    border-radius: 0;
+    margin: 0;
+  }
+
+  .roadmap-list {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 1.5rem;
+  }
+
+  .roadmap-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.35rem 0;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+
+  .roadmap-list__item--done {
+    color: var(--text) !important;
+  }
+
+  @media (max-width: 768px) {
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      z-index: 50;
+      transform: translateX(-100%);
+      transition: transform 0.25s ease;
+      padding-top: 3.5rem;
+    }
+
+    .sidebar.open {
+      transform: translateX(0);
+    }
+
+    .sidebar__close {
+      display: block;
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    .docs-overlay.open {
+      display: block;
+    }
+
+    .docs-menu-btn {
+      display: flex;
+    }
+
+    .docs-content {
+      padding: 2rem 1.5rem;
+    }
+  }
+</style>
+
+<script>
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('docs-overlay');
+  const menuBtn = document.getElementById('docs-menu-btn');
+  const closeBtn = document.getElementById('sidebar-close');
+
+  function openSidebar() {
+    sidebar?.classList.add('open');
+    overlay?.classList.add('open');
+  }
+
+  function closeSidebar() {
+    sidebar?.classList.remove('open');
+    overlay?.classList.remove('open');
+  }
+
+  menuBtn?.addEventListener('click', openSidebar);
+  closeBtn?.addEventListener('click', closeSidebar);
+  overlay?.addEventListener('click', closeSidebar);
+
+  const headings = document.querySelectorAll('article h2[id]');
+  const links = document.querySelectorAll('.sidebar__link');
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          links.forEach(l => l.classList.remove('active'));
+          const active = document.querySelector(`.sidebar__link[href="#${entry.target.id}"]`);
+          active?.classList.add('active');
+        }
+      });
+    },
+    { rootMargin: '-20% 0% -70% 0%' }
+  );
+
+  headings.forEach(h => observer.observe(h));
+
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const code = (btn as HTMLElement).dataset.code || '';
+      try {
+        await navigator.clipboard.writeText(code);
+        const orig = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(() => { btn.textContent = orig; }, 2000);
+      } catch {}
+    });
+  });
+</script>
